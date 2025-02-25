@@ -16,33 +16,32 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 public class EmployeeController {
     @Autowired
-    private EmployeeService employeeService;
+    private EmployeeService
+            employeeService;
     @GetMapping()
     public ResponseEntity<List<EmployeeEntity>> getAll(){
-        return ResponseEntity.ok(employeeService.getall());
+        return ResponseEntity.ok(
+                employeeService.getall());
     }
     @GetMapping("/{id}")
     public ResponseEntity<Optional<EmployeeEntity>> getEmployee(@RequestBody EmployeeDTO employeeDTO){
-        ModelMapper modelMapper = new ModelMapper();
-        EmployeeEntity employeeEntity = modelMapper.map(employeeDTO, EmployeeEntity.class);
-        return ResponseEntity.ok(employeeService.getEmployee(employeeEntity));
+        return ResponseEntity.ok(
+                employeeService.getEmployee(employeeDTO));
     }
     @PostMapping()
     public ResponseEntity<EmployeeEntity> setEmployee(@RequestBody EmployeeDTO employeeDTO){
-        ModelMapper modelMapper = new ModelMapper();
-        EmployeeEntity employeeEntity = modelMapper.map(employeeDTO, EmployeeEntity.class);
-        return ResponseEntity.ok(employeeService.createEmployee(employeeEntity));
+        return ResponseEntity.ok(
+                employeeService.createEmployee(employeeDTO));
     }
     @PutMapping()
     public ResponseEntity<EmployeeEntity> updateEmployee(@RequestBody EmployeeDTO employeeDTO){
-        ModelMapper modelMapper = new ModelMapper();
-        EmployeeEntity employeeEntity = modelMapper.map(employeeDTO,EmployeeEntity.class);
-        return ResponseEntity.ok(employeeService.updateEmployee(employeeEntity.getId(),employeeEntity));
+        return ResponseEntity.ok(
+                employeeService.updateEmployee(employeeDTO.getId(),employeeDTO));
     }
     @DeleteMapping()
     public ResponseEntity<String> deleteEmployee(@RequestBody EmployeeDTO employeeDTO){
-        ModelMapper modelMapper = new ModelMapper();
-        EmployeeEntity employeeEntity = modelMapper.map(employeeDTO,EmployeeEntity.class);
-        return ResponseEntity.ok(employeeService.deleteEmployee(employeeDTO.getId())?"Deleted the employee record":"unable to delete it");
+        return ResponseEntity.ok(
+                employeeService.deleteEmployee(employeeDTO.getId())?
+                        "Deleted the employee record":"unable to delete it");
     }
 }

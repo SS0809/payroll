@@ -6,6 +6,7 @@ import com.employee.payroll.repository.EmployeeRepository;
 import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.Setter;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,24 +20,33 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    @Transactional
+    @Transactional  // Either it will completely run or i wouldn't run at all
     public List<EmployeeEntity> getall(){
         return (employeeRepository.findAll());
     }
 
     @Transactional
-    public Optional<EmployeeEntity> getEmployee(EmployeeEntity employee){
-        return employeeRepository.findById(employee.getId());
+    public Optional<EmployeeEntity> getEmployee(EmployeeDTO employeeDTO){
+        ModelMapper modelMapper = new ModelMapper();
+        EmployeeEntity employeeEntity = modelMapper.map(employeeDTO, EmployeeEntity.class);
+        return employeeRepository.findById(employeeEntity.getId());
     }
     @Transactional
-    public EmployeeEntity createEmployee(EmployeeEntity employee){
-        return employeeRepository.save(employee);
+    public EmployeeEntity createEmployee(EmployeeDTO employeeDTO){
+        ModelMapper modelMapper = new ModelMapper();
+        EmployeeEntity employeeEntity = modelMapper.map(employeeDTO, EmployeeEntity.class);
+        return employeeRepository.save(employeeEntity);
     }
-    public EmployeeEntity updateEmployee(Long id, EmployeeEntity newEmployee) {
-        return employeeRepository.findById(id).map(existingEmployee -> {
-            existingEmployee.setName(newEmployee.getName() != null ? newEmployee.getName() : existingEmployee.getName());
-            existingEmployee.setSalary(newEmployee.getSalary() != null ? newEmployee.getSalary() : existingEmployee.getSalary());
-            return employeeRepository.save(existingEmployee);
+    public EmployeeEntity updateEmployee(Long id,EmployeeDTO employeeDTO){
+        ModelMapper modelMapper = new ModelMapper();
+        EmployeeEntity employeeEntity = modelMapper.map(employeeDTO,EmployeeEntity.class);
+        return employeeRepository.findById(id)
+                .map(existingEmployee -> {
+                    existingEmployee.setName(employeeEntity.getName() != null ?
+                            employeeEntity.getName() : existingEmployee.getName());
+                    existingEmployee.setSalary(employeeEntity.getSalary() != null ?
+                            employeeEntity.getSalary() : existingEmployee.getSalary());
+                return employeeRepository.save(existingEmployee);
         }).orElseThrow(() -> new RuntimeException("Employee not found with id " + id));
     }
 
