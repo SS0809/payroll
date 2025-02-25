@@ -19,5 +19,4 @@ public class EmployeeEntity {
     Long id;
     String name;
     Double salary;
-    String department;
 }

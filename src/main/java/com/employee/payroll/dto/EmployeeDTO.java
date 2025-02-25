@@ -9,5 +9,4 @@ public class EmployeeDTO {
     Long id;
     String name;
     Double salary;
-    String department;
 }

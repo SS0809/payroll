@@ -36,7 +36,6 @@ public class EmployeeService {
         return employeeRepository.findById(id).map(existingEmployee -> {
             existingEmployee.setName(newEmployee.getName() != null ? newEmployee.getName() : existingEmployee.getName());
             existingEmployee.setSalary(newEmployee.getSalary() != null ? newEmployee.getSalary() : existingEmployee.getSalary());
-            existingEmployee.setDepartment(newEmployee.getDepartment() != null ? newEmployee.getDepartment() : existingEmployee.getDepartment());
             return employeeRepository.save(existingEmployee);
         }).orElseThrow(() -> new RuntimeException("Employee not found with id " + id));
     }
